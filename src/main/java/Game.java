@@ -11,5 +11,6 @@ public class Game {
         myBoard.addShip(new Ship(4, new Coordinates(3,3), Direction.VERTICAL)); //FALSE
         myBoard.addShip(new Ship(4, new Coordinates(3,4), Direction.VERTICAL)); //FALSE
         myBoard.addShip(new Ship(4, new Coordinates(4,5), Direction.VERTICAL)); //TRUE
+        myBoard.addShip(new Ship(2, new Coordinates(5,4), Direction.VERTICAL)); //FALSE
     }
 }
