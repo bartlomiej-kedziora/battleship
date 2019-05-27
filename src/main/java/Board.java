@@ -10,10 +10,9 @@ public class Board {
     private Set<Ship> ships = new LinkedHashSet<Ship>();
     private Set<Ship> sunkShips = new LinkedHashSet<Ship>();
     private Map<Ship, List<Boolean>> shipState = new HashMap<Ship, List<Boolean>>();
-    private ShipPlacedValidator shipPlacedValidator = new ShipPlacedValidator();
 
     public void addShip(Ship ship) {
-        if (shipPlacedValidator.validate(ship)) {
+        if (new ShipPlacedValidator(this).validate(ship)) {
             ships.add(ship);
             System.out.println("Ship added :)");
         } else {
@@ -22,7 +21,7 @@ public class Board {
     }
 
     public Set<Ship> getShips() {
-        return new LinkedHashSet<>(ships);
+        return ImmutableSet.copyOf(ships);
     }
 
 }

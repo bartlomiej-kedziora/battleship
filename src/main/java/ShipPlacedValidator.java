@@ -1,6 +1,5 @@
 import com.google.common.collect.ImmutableMap;
 
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -18,14 +17,14 @@ public class ShipPlacedValidator {
             = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isVerticalShipNotTouchingHorizontalShip,
             Direction.VERTICAL, ShipPlacedValidator::isVerticalShipNotTouchingVerticalShip);
 
-    private Set<Ship> ships = new LinkedHashSet<Ship>();
+    private Set<Ship> ships;
+
+    public ShipPlacedValidator(Board board) {
+        ships = board.getShips();
+    }
 
     public boolean validate(Ship ship) {
-        if (isShipPlacedInProperPositionOnBoard(ship)) {
-            ships.add(ship);
-            return true;
-        }
-        return false;
+        return isShipPlacedInProperPositionOnBoard(ship);
     }
 
     private boolean isShipPlacedInProperPositionOnBoard(Ship ship) {
@@ -58,9 +57,17 @@ public class ShipPlacedValidator {
     }
 
     private static boolean isHorizontalShipNotTouchingHorizontalShip(Ship ship, Ship existedShip) {
-        for (int n = ship.getHeadPosition().getPosX(); n <= ship.getHeadPosition().getPosX() + ship.getSize(); n++) {
-            for (int e = existedShip.getHeadPosition().getPosX(); e <= existedShip.getHeadPosition().getPosX() + existedShip.getSize(); e++) {
-                if (isShipsCoordinatesTouching(n, e, ship.getHeadPosition().getPosY(), existedShip.getHeadPosition().getPosY())) {
+        int iStartLoop = ship.getHeadPosition().getPosX();
+        int iStopLoop = ship.getHeadPosition().getPosX() + ship.getSize();
+        int jStartLoop = existedShip.getHeadPosition().getPosX();
+        int jStopLoop = existedShip.getHeadPosition().getPosX() + existedShip.getSize();
+        int y1 = ship.getHeadPosition().getPosY();
+        int y2 = existedShip.getHeadPosition().getPosY();
+        for (int i = iStartLoop; i <= iStopLoop; i++) {
+            for (int j = jStartLoop; j <= jStopLoop; j++) {
+                int x1 = i;
+                int x2 = j;
+                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
                     return false;
                 }
             }
@@ -69,9 +76,17 @@ public class ShipPlacedValidator {
     }
 
     private static boolean isHorizontalShipNotTouchingVerticalShip(Ship ship, Ship existedShip) {
-        for (int n = ship.getHeadPosition().getPosX(); n <= ship.getHeadPosition().getPosX() + ship.getSize(); n++) {
-            for (int e = existedShip.getHeadPosition().getPosY(); e <= existedShip.getHeadPosition().getPosY() + existedShip.getSize(); e++) {
-                if (isShipsCoordinatesTouching(n, existedShip.getHeadPosition().getPosX(), e, ship.getHeadPosition().getPosY())) {
+        int iStartLoop = ship.getHeadPosition().getPosX();
+        int iStopLoop = ship.getHeadPosition().getPosX() + ship.getSize();
+        int jStartLoop = existedShip.getHeadPosition().getPosY();
+        int jStopLoop = existedShip.getHeadPosition().getPosY() + existedShip.getSize();
+        int x2 = existedShip.getHeadPosition().getPosX();
+        int y1 = ship.getHeadPosition().getPosY();
+        for (int i = iStartLoop; i <= iStopLoop; i++) {
+            for (int j = jStartLoop; j <= jStopLoop; j++) {
+                int x1 = i;
+                int y2 = j;
+                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
                     return false;
                 }
             }
@@ -84,9 +99,17 @@ public class ShipPlacedValidator {
     }
 
     private static boolean isVerticalShipNotTouchingHorizontalShip(Ship ship, Ship existedShip) {
-        for (int n = ship.getHeadPosition().getPosY(); n <= ship.getHeadPosition().getPosY() + ship.getSize(); n++) {
-            for (int e = existedShip.getHeadPosition().getPosX(); e <= existedShip.getHeadPosition().getPosX() + existedShip.getSize(); e++) {
-                if (isShipsCoordinatesTouching(n, existedShip.getHeadPosition().getPosY(), e, ship.getHeadPosition().getPosX())) {
+        int iStartLoop = ship.getHeadPosition().getPosY();
+        int iStopLoop = ship.getHeadPosition().getPosY() + ship.getSize();
+        int jStartLoop = existedShip.getHeadPosition().getPosX();
+        int jStopLoop = existedShip.getHeadPosition().getPosX() + existedShip.getSize();
+        int x1 = ship.getHeadPosition().getPosX();
+        int y2 = existedShip.getHeadPosition().getPosY();
+        for (int i = iStartLoop; i <= iStopLoop; i++) {
+            for (int j = jStartLoop; j <= jStopLoop; j++) {
+                int y1 = i;
+                int x2 = j;
+                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
                     return false;
                 }
             }
@@ -95,9 +118,18 @@ public class ShipPlacedValidator {
     }
 
     private static boolean isVerticalShipNotTouchingVerticalShip(Ship ship, Ship existedShip) {
-        for (int n = ship.getHeadPosition().getPosY(); n <= ship.getHeadPosition().getPosY() + ship.getSize(); n++) {
-            for (int e = existedShip.getHeadPosition().getPosY(); e <= existedShip.getHeadPosition().getPosY() + existedShip.getSize(); e++) {
-                if (isShipsCoordinatesTouching(n, e, existedShip.getHeadPosition().getPosX(), ship.getHeadPosition().getPosX())) {
+        int iStartLoop = ship.getHeadPosition().getPosY();
+        int iStopLoop = ship.getHeadPosition().getPosY() + ship.getSize();
+        int jStartLoop = existedShip.getHeadPosition().getPosY();
+        int jStopLoop = existedShip.getHeadPosition().getPosY() + existedShip.getSize();
+        int x1 = ship.getHeadPosition().getPosX();
+        int x2 = existedShip.getHeadPosition().getPosX();
+
+        for (int i = iStartLoop; i <= iStopLoop; i++) {
+            for (int j = jStartLoop; j <= jStopLoop; j++) {
+                int y1 = i;
+                int y2 = j;
+                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
                     return false;
                 }
             }
@@ -105,11 +137,11 @@ public class ShipPlacedValidator {
         return true;
     }
 
-    private static boolean isShipsCoordinatesTouching(int x1, int x2, int y1, int y2) {
-        return isCoordinateTouching(x1, x2) && isCoordinateTouching(y1, y2);
+    private static boolean isTwoDimensionCoordinateTouching(int x1, int x2, int y1, int y2) {
+        return isOneDimensionCoordinateTouching(x1, x2) && isOneDimensionCoordinateTouching(y1, y2);
     }
 
-    private static boolean isCoordinateTouching(int x1, int x2) {
+    private static boolean isOneDimensionCoordinateTouching(int x1, int x2) {
         return x1 == x2 || x1 == x2 - 1 || x1 == x2 + 1;
     }
 }

@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 public class Player {
@@ -27,7 +28,7 @@ public class Player {
     }
 
     public List<Ship> getMyShips() {
-        return new ArrayList<Ship>(myShips);
+        return ImmutableList.copyOf(myShips);
     }
 
     public void addShip(Ship ship) {
