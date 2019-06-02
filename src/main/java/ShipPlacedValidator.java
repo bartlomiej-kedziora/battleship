@@ -6,16 +6,16 @@ import java.util.function.BiFunction;
 
 public class ShipPlacedValidator {
     public static final Map<Direction, BiFunction<Ship, Ship, Boolean>> NEW_SHIP_TOUCHING_CHECKER_WITH_ADDED
-            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isHorizontalShipNotTouchingAnotherShip,
-            Direction.VERTICAL, ShipPlacedValidator::isVerticalShipNotTouchingAnotherShip);
+            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isHorizontalShipTouchingAnotherShip,
+            Direction.VERTICAL, ShipPlacedValidator::isVerticalShipTouchingAnotherShip);
 
     private static final Map<Direction, BiFunction<Ship, Ship, Boolean>> HORIZONTAL_SHIP_COORDINATES_TOUCHING_CHECKER
-            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isHorizontalShipNotTouchingHorizontalShip,
-            Direction.VERTICAL, ShipPlacedValidator::isHorizontalShipNotTouchingVerticalShip);
+            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isHorizontalShipTouchingHorizontalShip,
+            Direction.VERTICAL, ShipPlacedValidator::isHorizontalShipTouchingVerticalShip);
 
     private static final Map<Direction, BiFunction<Ship, Ship, Boolean>> VERTICAL_SHIP_COORDINATES_TOUCHING_CHECKER
-            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isVerticalShipNotTouchingHorizontalShip,
-            Direction.VERTICAL, ShipPlacedValidator::isVerticalShipNotTouchingVerticalShip);
+            = ImmutableMap.of(Direction.HORIZONTAL, ShipPlacedValidator::isVerticalShipTouchingHorizontalShip,
+            Direction.VERTICAL, ShipPlacedValidator::isVerticalShipTouchingVerticalShip);
 
     private Set<Ship> ships;
 
@@ -28,15 +28,16 @@ public class ShipPlacedValidator {
     }
 
     private boolean isShipPlacedInProperPositionOnBoard(Ship ship) {
-        boolean result = true;
         if (isSizeOfShipFitToSizeOfBoard(ship)) {
             for (Ship existedShip : ships) {
-                result = NEW_SHIP_TOUCHING_CHECKER_WITH_ADDED.get(ship.getDirection()).apply(ship, existedShip);
+                if(NEW_SHIP_TOUCHING_CHECKER_WITH_ADDED.get(ship.getDirection()).apply(ship, existedShip)) {
+                    return false;
+                }
             }
         } else {
-            result = false;
+            return false;
         }
-        return result;
+        return true;
     }
 
     private boolean isSizeOfShipFitToSizeOfBoard(Ship ship) {
@@ -52,96 +53,77 @@ public class ShipPlacedValidator {
                 && ship.getHeadPosition().getPosY() + ship.getSize() - 1 <= Board.Y_SIZE;
     }
 
-    private static boolean isHorizontalShipNotTouchingAnotherShip(Ship ship, Ship existedShip) {
+    private static boolean isHorizontalShipTouchingAnotherShip(Ship ship, Ship existedShip) {
         return HORIZONTAL_SHIP_COORDINATES_TOUCHING_CHECKER.get(existedShip.getDirection()).apply(ship, existedShip);
     }
 
-    private static boolean isHorizontalShipNotTouchingHorizontalShip(Ship ship, Ship existedShip) {
-        int iStartLoop = ship.getHeadPosition().getPosX();
-        int iStopLoop = ship.getHeadPosition().getPosX() + ship.getSize();
-        int jStartLoop = existedShip.getHeadPosition().getPosX();
-        int jStopLoop = existedShip.getHeadPosition().getPosX() + existedShip.getSize();
-        int y1 = ship.getHeadPosition().getPosY();
-        int y2 = existedShip.getHeadPosition().getPosY();
-        for (int i = iStartLoop; i <= iStopLoop; i++) {
-            for (int j = jStartLoop; j <= jStopLoop; j++) {
-                int x1 = i;
-                int x2 = j;
-                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private static boolean isHorizontalShipNotTouchingVerticalShip(Ship ship, Ship existedShip) {
-        int iStartLoop = ship.getHeadPosition().getPosX();
-        int iStopLoop = ship.getHeadPosition().getPosX() + ship.getSize();
-        int jStartLoop = existedShip.getHeadPosition().getPosY();
-        int jStopLoop = existedShip.getHeadPosition().getPosY() + existedShip.getSize();
-        int x2 = existedShip.getHeadPosition().getPosX();
-        int y1 = ship.getHeadPosition().getPosY();
-        for (int i = iStartLoop; i <= iStopLoop; i++) {
-            for (int j = jStartLoop; j <= jStopLoop; j++) {
-                int x1 = i;
-                int y2 = j;
-                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private static boolean isVerticalShipNotTouchingAnotherShip(Ship ship, Ship existedShip) {
+    private static boolean isVerticalShipTouchingAnotherShip(Ship ship, Ship existedShip) {
         return VERTICAL_SHIP_COORDINATES_TOUCHING_CHECKER.get(existedShip.getDirection()).apply(ship, existedShip);
     }
 
-    private static boolean isVerticalShipNotTouchingHorizontalShip(Ship ship, Ship existedShip) {
-        int iStartLoop = ship.getHeadPosition().getPosY();
-        int iStopLoop = ship.getHeadPosition().getPosY() + ship.getSize();
-        int jStartLoop = existedShip.getHeadPosition().getPosX();
-        int jStopLoop = existedShip.getHeadPosition().getPosX() + existedShip.getSize();
-        int x1 = ship.getHeadPosition().getPosX();
-        int y2 = existedShip.getHeadPosition().getPosY();
-        for (int i = iStartLoop; i <= iStopLoop; i++) {
-            for (int j = jStartLoop; j <= jStopLoop; j++) {
-                int y1 = i;
-                int x2 = j;
-                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    private static boolean isHorizontalShipTouchingHorizontalShip(Ship ship, Ship existedShip) {
+        boolean isXinScope = isShapeInLineScope(ship.getHeadPosition().getPosX(),
+                ship.getHeadPosition().getPosX() + ship.getSize() - 1,
+                existedShip.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX() + existedShip.getSize() - 1);
+        boolean isYinScope = isShapeInLineScope(ship.getHeadPosition().getPosY(),
+                ship.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY());
+        return isXinScope && isYinScope;
     }
 
-    private static boolean isVerticalShipNotTouchingVerticalShip(Ship ship, Ship existedShip) {
-        int iStartLoop = ship.getHeadPosition().getPosY();
-        int iStopLoop = ship.getHeadPosition().getPosY() + ship.getSize();
-        int jStartLoop = existedShip.getHeadPosition().getPosY();
-        int jStopLoop = existedShip.getHeadPosition().getPosY() + existedShip.getSize();
-        int x1 = ship.getHeadPosition().getPosX();
-        int x2 = existedShip.getHeadPosition().getPosX();
-
-        for (int i = iStartLoop; i <= iStopLoop; i++) {
-            for (int j = jStartLoop; j <= jStopLoop; j++) {
-                int y1 = i;
-                int y2 = j;
-                if (isTwoDimensionCoordinateTouching(x1, x2, y1, y2)) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    private static boolean isHorizontalShipTouchingVerticalShip(Ship ship, Ship existedShip) {
+        boolean isXinScope = isShapeInLineScope(ship.getHeadPosition().getPosX(),
+                ship.getHeadPosition().getPosX() + ship.getSize() - 1,
+                existedShip.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX() + existedShip.getSize() - 1);
+        boolean isYinScope = isShapeInLineScope(ship.getHeadPosition().getPosY(),
+                ship.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY() + existedShip.getSize() - 1);
+        return isXinScope && isYinScope;
     }
 
-    private static boolean isTwoDimensionCoordinateTouching(int x1, int x2, int y1, int y2) {
-        return isOneDimensionCoordinateTouching(x1, x2) && isOneDimensionCoordinateTouching(y1, y2);
+    private static boolean isVerticalShipTouchingVerticalShip(Ship ship, Ship existedShip) {
+        boolean isXinScope = isShapeInLineScope(ship.getHeadPosition().getPosX(),
+                ship.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX());
+        boolean isYinScope = isShapeInLineScope(ship.getHeadPosition().getPosY(),
+                ship.getHeadPosition().getPosY() + ship.getSize() - 1,
+                existedShip.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY() + existedShip.getSize() - 1);
+        return isXinScope && isYinScope;
     }
 
-    private static boolean isOneDimensionCoordinateTouching(int x1, int x2) {
-        return x1 == x2 || x1 == x2 - 1 || x1 == x2 + 1;
+    private static boolean isVerticalShipTouchingHorizontalShip(Ship ship, Ship existedShip) {
+        boolean isXinScope = isShapeInLineScope(ship.getHeadPosition().getPosX(),
+                ship.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX(),
+                existedShip.getHeadPosition().getPosX() + existedShip.getSize() - 1);
+        boolean isYinScope = isShapeInLineScope(ship.getHeadPosition().getPosY(),
+                ship.getHeadPosition().getPosY() + ship.getSize() - 1,
+                existedShip.getHeadPosition().getPosY(),
+                existedShip.getHeadPosition().getPosY());
+        return isXinScope && isYinScope;
+    }
+
+    private static boolean isShapeInLineScope(int lineStartPoint, int lineEndPoint, int comparedLineStartPoint, int comparedLineEndPoint) {
+        return isPointInScope(lineStartPoint, comparedLineStartPoint, comparedLineEndPoint)
+                || isPointInScope(lineEndPoint, comparedLineStartPoint, comparedLineEndPoint);
+    }
+
+    private static boolean isPointInScope(int point, int comparedStartPointLine, int comparedEndPointLine) {
+        return isPointInStartedScope(point, comparedStartPointLine)
+                && isPointInEndedScope(point, comparedEndPointLine);
+
+    }
+    private static boolean isPointInStartedScope(int startPoint, int comparedStartPoint) {
+        return startPoint >= comparedStartPoint - 1;
+    }
+
+    private static boolean isPointInEndedScope(int startPoint, int comparedEndPoint) {
+        return startPoint <= comparedEndPoint + 1;
     }
 }
