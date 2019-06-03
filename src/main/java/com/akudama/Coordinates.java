@@ -1,3 +1,5 @@
+package com.akudama;
+
 public class Coordinates {
     private final int posX;
     private final int posY;

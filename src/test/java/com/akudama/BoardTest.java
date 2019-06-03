@@ -1,3 +1,5 @@
+package com.akudama;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -78,7 +80,7 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 2);
     }
@@ -88,8 +90,8 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2,2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 2);
     }
@@ -99,9 +101,9 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,3), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 2);
     }
@@ -111,10 +113,10 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,4), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 2);
     }
@@ -124,11 +126,11 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,4), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(4,5), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(4, 5), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 3);
     }
@@ -138,12 +140,12 @@ public class BoardTest {
         myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
         myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2,2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3,4), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(4,5), Direction.VERTICAL));
-        myBoard.addShip(new Ship(3, new Coordinates(5,4), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
+        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
+        myBoard.addShip(new Ship(1, new Coordinates(4, 5), Direction.VERTICAL));
+        myBoard.addShip(new Ship(3, new Coordinates(5, 4), Direction.VERTICAL));
 
         assertEquals(myBoard.getShips().size(), 3);
     }

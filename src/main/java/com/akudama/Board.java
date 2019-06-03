@@ -1,6 +1,12 @@
+package com.akudama;
+
 import com.google.common.collect.ImmutableSet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Board {
 

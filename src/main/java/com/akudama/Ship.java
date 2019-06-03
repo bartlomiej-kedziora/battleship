@@ -1,3 +1,5 @@
+package com.akudama;
+
 public class Ship {
 
     private int size;
