@@ -17,12 +17,11 @@ public class Board {
     private Set<Ship> sunkShips = new LinkedHashSet<Ship>();
     private Map<Ship, List<Boolean>> shipState = new HashMap<Ship, List<Boolean>>();
 
-    public void addShip(Ship ship) {
+    public void addShip(Ship ship) throws Exception {
         if (new ShipPlacedValidator(this).validate(ship)) {
             ships.add(ship);
-            System.out.println("Ship added :)");
         } else {
-            System.out.println("This ship can't be added because is touching another ship! Try again!");
+            throw new Exception("This ship can't be added because is touching another ship! Try again!");
         }
     }
 

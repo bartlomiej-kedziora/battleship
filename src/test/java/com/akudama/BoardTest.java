@@ -28,126 +28,75 @@ public class BoardTest {
 
     @Test
     public void shouldNotAddShipWhichSizeIsLessThanOne() {
-        myBoard.addShip(new Ship(0, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(-1, new Coordinates(3, 4), Direction.VERTICAL));
+        try {
+            myBoard.addShip(new Ship(0, new Coordinates(1, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(-1, new Coordinates(3, 4), Direction.VERTICAL));
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         assertEquals(myBoard.getShips().size(), 0);
     }
 
     @Test
     public void shouldNotAddShipWhichSizeIsMoreThanMaxBoardSize() {
-        myBoard.addShip(new Ship(Board.X_SIZE + 1, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(Board.Y_SIZE + 1, new Coordinates(1, 1), Direction.VERTICAL));
+        try {
+            myBoard.addShip(new Ship(Board.X_SIZE + 1, new Coordinates(1, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(Board.Y_SIZE + 1, new Coordinates(1, 1), Direction.VERTICAL));
+        } catch(Exception e) {
+        System.out.println(e);
+        }
 
         assertEquals(myBoard.getShips().size(), 0);
     }
 
     @Test
     public void shouldNotAddShipIfItsHeadIsOutOfBoard() {
-        myBoard.addShip(new Ship(2, new Coordinates(0, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(-1, 2), Direction.VERTICAL));
+        try {
+            myBoard.addShip(new Ship(2, new Coordinates(0, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(3, new Coordinates(-1, 2), Direction.VERTICAL));
+        } catch(Exception e) {
+            System.out.println(e);
+
+        }
 
         assertEquals(myBoard.getShips().size(), 0);
     }
 
     @Test
     public void shouldNotAddShipIfItsTailIsOutOfBoard() {
-        myBoard.addShip(new Ship(2, new Coordinates(Board.X_SIZE, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(2, Board.Y_SIZE - 1), Direction.VERTICAL));
+        try {
+            myBoard.addShip(new Ship(2, new Coordinates(Board.X_SIZE, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(3, new Coordinates(2, Board.Y_SIZE - 1), Direction.VERTICAL));
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         assertEquals(myBoard.getShips().size(), 0);
     }
 
     @Test
     public void shouldAddOneShipToBoardWhereOneIsTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
+        try {
+            myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         assertEquals(myBoard.getShips().size(), 1);
     }
 
     @Test
     public void shouldAddTwoShipsToBoardWhereOneIsTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
+        try {
+            myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
+            myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         assertEquals(myBoard.getShips().size(), 2);
-    }
-
-    @Test
-    public void shouldAddTwoShipsToBoardWhereTwoAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 2);
-    }
-
-    @Test
-    public void shouldAddTwoShipsToBoardWhereThreeAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 2);
-    }
-
-    @Test
-    public void shouldAddTwoShipsToBoardWhereFourAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 2);
-    }
-
-    @Test
-    public void shouldAddTwoShipsToBoardWhereFiveAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 2);
-    }
-
-    @Test
-    public void shouldAddThreeShipsToBoardWhereFiveAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(4, 5), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 3);
-    }
-
-    @Test
-    public void shouldAddThreeShipsToBoardWhereSixAreTouching() {
-        myBoard.addShip(new Ship(2, new Coordinates(1, 1), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(3, new Coordinates(1, 2), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(4, new Coordinates(1, 3), Direction.HORIZONTAL));
-        myBoard.addShip(new Ship(1, new Coordinates(1, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(2, 2), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 3), Direction.VERTICAL));
-        myBoard.addShip(new Ship(2, new Coordinates(3, 4), Direction.VERTICAL));
-        myBoard.addShip(new Ship(1, new Coordinates(4, 5), Direction.VERTICAL));
-        myBoard.addShip(new Ship(3, new Coordinates(5, 4), Direction.VERTICAL));
-
-        assertEquals(myBoard.getShips().size(), 3);
     }
 }
-

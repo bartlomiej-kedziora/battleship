@@ -7,6 +7,9 @@ import java.util.Set;
 
 public class ShipPlacedValidator {
     private Set<Ship> ships;
+    private enum ShipParts {
+        HEAD, TAIL
+    }
 
     public ShipPlacedValidator(Board board) {
         ships = board.getShips();
@@ -29,45 +32,59 @@ public class ShipPlacedValidator {
     }
 
     private boolean isEndedOnBoard(Ship ship) {
-        return ship.getHeadPosition().getPosX() + ship.getSize() - 1 <= Board.X_SIZE
-                && ship.getHeadPosition().getPosY() + ship.getSize() - 1 <= Board.Y_SIZE;
+        return isInHorizontalScopeOfBoard(ship) && isInVerticalScopeOfBoard(ship);
+    }
+
+    private boolean isInHorizontalScopeOfBoard(Ship ship) {
+        return ship.getHeadPosition().getPosX() + ship.getSize() - 1 <= Board.X_SIZE;
+    }
+
+    private boolean isInVerticalScopeOfBoard(Ship ship) {
+        return ship.getHeadPosition().getPosY() + ship.getSize() - 1 <= Board.Y_SIZE;
     }
 
     private boolean isShipNotTouchingAnyOfExistedShips(Ship ship) {
         return !ships.stream()
-                .filter(existedShip -> isShipTouchingAnotherShip(ship, existedShip))
-                .findFirst().isPresent();
+                .anyMatch(existedShip -> isShipTouchingAnotherShip(ship, existedShip));
     }
 
     private boolean isShipTouchingAnotherShip(Ship ship, Ship existedShip) {
-        Map<String, Coordinates> shipCoordinates = setShipCoordinate(ship);
-        Map<String, Coordinates> existedShipCoordinates = setShipCoordinate(existedShip);
-
-        boolean isXinScope = isShapeInLineScope(shipCoordinates.get("head").getPosX(),
-                shipCoordinates.get("tail").getPosX(),
-                existedShipCoordinates.get("head").getPosX(),
-                existedShipCoordinates.get("tail").getPosX());
-        boolean isYinScope = isShapeInLineScope(shipCoordinates.get("head").getPosY(),
-                shipCoordinates.get("tail").getPosY(),
-                existedShipCoordinates.get("head").getPosY(),
-                existedShipCoordinates.get("tail").getPosY());
-
-        return isXinScope && isYinScope;
+        Map<ShipParts, Coordinates> shipCoordinates = getShipCoordinates(ship);
+        Map<ShipParts, Coordinates> existedShipCoordinates = getShipCoordinates(existedShip);
+        return isShipXCoordinateInScope(shipCoordinates, existedShipCoordinates)
+                && isShipYCoordinateInScope(shipCoordinates, existedShipCoordinates);
     }
 
-    private Map<String, Coordinates> setShipCoordinate(Ship ship) {
-        Coordinates headShip = new Coordinates(ship.getHeadPosition().getPosX(), ship.getHeadPosition().getPosY());
-        Map<Direction, Coordinates> tailShip = ImmutableMap.<Direction, Coordinates>builder()
+    private boolean isShipXCoordinateInScope(Map<ShipParts, Coordinates> shipCoordinates, Map<ShipParts, Coordinates> existedShipCoordinates) {
+        return isShapeInLineScope(shipCoordinates.get(ShipParts.HEAD).getPosX(),
+                shipCoordinates.get(ShipParts.TAIL).getPosX(),
+                existedShipCoordinates.get(ShipParts.HEAD).getPosX(),
+                existedShipCoordinates.get(ShipParts.TAIL).getPosX());
+    }
+
+    private boolean isShipYCoordinateInScope(Map<ShipParts, Coordinates> shipCoordinates, Map<ShipParts, Coordinates> existedShipCoordinates) {
+        return isShapeInLineScope(shipCoordinates.get(ShipParts.HEAD).getPosY(),
+                shipCoordinates.get(ShipParts.TAIL).getPosY(),
+                existedShipCoordinates.get(ShipParts.HEAD).getPosY(),
+                existedShipCoordinates.get(ShipParts.TAIL).getPosY());
+    }
+
+    private Map<ShipParts, Coordinates> getShipCoordinates(Ship ship) {
+        return ImmutableMap.<ShipParts, Coordinates>builder()
+                .put(ShipParts.HEAD, getHeadShipCoordinate(ship))
+                .put(ShipParts.TAIL, getTailShipCoordinate(ship).get(ship.getDirection()))
+                .build();
+    }
+
+    private Coordinates getHeadShipCoordinate(Ship ship) {
+        return new Coordinates(ship.getHeadPosition().getPosX(), ship.getHeadPosition().getPosY());
+    }
+
+    private Map<Direction, Coordinates> getTailShipCoordinate(Ship ship) {
+        return ImmutableMap.<Direction, Coordinates>builder()
                 .put(Direction.HORIZONTAL, new Coordinates(ship.getHeadPosition().getPosX() + ship.getSize() - 1, ship.getHeadPosition().getPosY()))
                 .put(Direction.VERTICAL, new Coordinates(ship.getHeadPosition().getPosX(), ship.getHeadPosition().getPosY() + ship.getSize() - 1))
                 .build();
-
-        Map<String, Coordinates> shipCoordinate = ImmutableMap.<String, Coordinates>builder()
-                .put("head", headShip)
-                .put("tail", tailShip.get(ship.getDirection()))
-                .build();
-
-        return ImmutableMap.copyOf(shipCoordinate);
     }
 
     private boolean isShapeInLineScope(int lineStartPoint, int lineEndPoint, int comparedLineStartPoint, int comparedLineEndPoint) {
