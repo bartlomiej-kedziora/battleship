@@ -1,4 +1,4 @@
-package com.akudama;
+package com.akudama.game.battleship.gameplay.model;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -18,7 +18,7 @@ public class Board {
     private Map<Ship, List<Boolean>> shipState = new HashMap<Ship, List<Boolean>>();
 
     public void addShip(Ship ship) throws Exception {
-        if (new ShipPlacedValidator(this).validate(ship)) {
+        if (new ShipPlacedValidator(getShips()).validate(ship)) {
             ships.add(ship);
         } else {
             throw new Exception("This ship can't be added because is touching another ship! Try again!");

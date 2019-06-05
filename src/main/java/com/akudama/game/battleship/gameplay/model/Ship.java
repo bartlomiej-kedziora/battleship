@@ -1,4 +1,4 @@
-package com.akudama;
+package com.akudama.game.battleship.gameplay.model;
 
 public class Ship {
 

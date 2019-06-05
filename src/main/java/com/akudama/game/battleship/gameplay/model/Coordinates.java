@@ -1,4 +1,4 @@
-package com.akudama;
+package com.akudama.game.battleship.gameplay.model;
 
 public class Coordinates {
     private final int posX;

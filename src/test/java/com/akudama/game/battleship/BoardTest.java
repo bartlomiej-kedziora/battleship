@@ -1,5 +1,10 @@
-package com.akudama;
+package com.akudama.game.battleship;
 
+import com.akudama.game.battleship.gameplay.model.Board;
+import com.akudama.game.battleship.gameplay.model.Coordinates;
+import com.akudama.game.battleship.gameplay.model.Direction;
+import com.akudama.game.battleship.gameplay.model.Player;
+import com.akudama.game.battleship.gameplay.model.Ship;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,5 +1,7 @@
-package com.akudama;
+package com.akudama.game.battleship.gameplay.model;
 
+import com.akudama.game.battleship.gameplay.model.Board;
+import com.akudama.game.battleship.gameplay.model.Ship;
 import com.google.common.collect.ImmutableList;
 
 import java.util.List;
