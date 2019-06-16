@@ -1,5 +1,6 @@
 package com.akudama.game.battleship.gameplay.model;
 
+import com.akudama.game.battleship.gameplay.exceptions.OutOfBoardException;
 import com.google.common.collect.ImmutableMap;
 
 import java.util.Map;
@@ -28,8 +29,12 @@ public class ShipPlacedValidator {
         return isShipPlacedInProperPositionOnBoard(ship);
     }
 
-    private boolean isShipPlacedInProperPositionOnBoard(Ship ship) {
-        return isSizeOfShipFitToSizeOfBoard(ship) && isShipNotTouchingAnyOfExistedShips(ship);
+    private boolean isShipPlacedInProperPositionOnBoard(Ship ship) throws OutOfBoardException {
+        boolean checker = isSizeOfShipFitToSizeOfBoard(ship) && isShipNotTouchingAnyOfExistedShips(ship);
+        if(checker) {
+            throw new OutOfBoardException("Ship isn't placed in proper position on board!");
+        }
+        return checker;
     }
 
     private boolean isSizeOfShipFitToSizeOfBoard(Ship ship) {
@@ -61,6 +66,11 @@ public class ShipPlacedValidator {
         Map<ShipParts, Coordinates> shipCoordinates = getShipCoordinates(ship);
         Map<ShipParts, Coordinates> existedShipCoordinates = getShipCoordinates(existedShip);
 
+        return areBothCoordinatesInScope(shipCoordinates, existedShipCoordinates);
+    }
+
+    private boolean areBothCoordinatesInScope(Map<ShipParts, Coordinates> shipCoordinates,
+                                              Map<ShipParts, Coordinates> existedShipCoordinates) {
         return isShipCoordinateInScope(shipCoordinates, existedShipCoordinates, CoordinateType.X)
                 && isShipCoordinateInScope(shipCoordinates, existedShipCoordinates, CoordinateType.Y);
     }
